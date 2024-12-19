@@ -1,66 +1,57 @@
+import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class LoginFormBorderLayout extends Frame implements ActionListener {
-    Label labelUsername, labelPassword, labelMessage;
-    TextField textUsername, textPassword;
-    Button loginButton;
+public class LoginForm extends JFrame {
 
-    public LoginFormBorderLayout() {
-        setLayout(new BorderLayout());
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JButton loginButton;
+    private JLabel messageLabel;
 
-        Panel inputPanel = new Panel(new GridLayout(2, 2, 5, 5)); // Rows, Columns, Hgap, Vgap
-        labelUsername = new Label("Username:");
-        textUsername = new TextField(20);
-        labelPassword = new Label("Password:");
-        textPassword = new TextField(20);
-        textPassword.setEchoChar('*');
-
-        inputPanel.add(labelUsername);
-        inputPanel.add(textUsername);
-        inputPanel.add(labelPassword);
-        inputPanel.add(textPassword);
-
-        Panel buttonPanel = new Panel();
-        loginButton = new Button("Login");
-        loginButton.addActionListener(this);
-        buttonPanel.add(loginButton);
-
-        labelMessage = new Label("", Label.CENTER); 
-
-        add(inputPanel, BorderLayout.CENTER); 
-        add(buttonPanel, BorderLayout.SOUTH); 
-        add(labelMessage, BorderLayout.NORTH); 
-
+    public LoginForm() {
         setTitle("Login Form");
-        setSize(300, 200);
-        setVisible(true);
-        setLocationRelativeTo(null);
+        setLayout(new FlowLayout());
 
-        addWindowListener(new WindowAdapter() {
+        JLabel usernameLabel = new JLabel("Username:");
+        usernameField = new JTextField(15);
+        
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordField = new JPasswordField(15);
+        
+        loginButton = new JButton("Login");
+        messageLabel = new JLabel("");
+
+        add(usernameLabel);
+        add(usernameField);
+        add(passwordLabel);
+        add(passwordField);
+        add(loginButton);
+        add(messageLabel);
+
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+
+        loginButton.addActionListener(new ActionListener() {
             @Override
-            public void windowClosing(WindowEvent e) {
-                dispose(); 
-                System.exit(0); 
+            public void actionPerformed(ActionEvent e) {
+                String username = usernameField.getText();
+                String password = new String(passwordField.getPassword());
+
+                if (username.equals("user") && password.equals("password")) {
+                    messageLabel.setText("Login Successful");
+                    messageLabel.setForeground(Color.GREEN);
+                } else {
+                    messageLabel.setText("Invalid username or password");
+                    messageLabel.setForeground(Color.RED);
+                }
             }
         });
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String username = textUsername.getText();
-        String password = textPassword.getText();
-
-        if (username.equals("admin") && password.equals("admin")) {
-            labelMessage.setText("Login successful!");
-            labelMessage.setForeground(Color.GREEN);
-        } else {
-            labelMessage.setText("Login failed. Try again.");
-            labelMessage.setForeground(Color.RED);
-        }
-    }
-
     public static void main(String[] args) {
-        new LoginFormBorderLayout();
+        new LoginForm();
     }
 }
